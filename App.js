@@ -131,6 +131,7 @@ export default class App extends Component {
 						value={isFahrenheit}
 						trackColor={{ true: "#ffae82", false: null }}
 						_thumbColor="#ff5a00"
+						style={styles.switch}
 					/>
 				</View>
 			</View>
@@ -146,18 +147,20 @@ const styles = StyleSheet.create({
 	},
 	locationName: {
 		fontSize: 26,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontWeight: '500',
+		color: '#ff5a00'
 	},
 	locationTemp: {
 		fontSize: 22,
-		textAlign: 'center'
+		textAlign: 'center',
+		color: '#436389'
 	},
 	locationContainer: {
 		minHeight: 80
 	},
 	mapContainer: {
 		flex: 0.8,
-		borderRadius: 5,
 		overflow: 'hidden',
 		backgroundColor: '#FFF'
 	},
@@ -170,11 +173,14 @@ const styles = StyleSheet.create({
 	},
 	switchContainer: {
 		flexDirection: 'row',
-		justifyContent: 'flex-start',
+		justifyContent: 'space-between',
 		alignItems: 'center'
 	},
+	switch: {
+		left: 14
+	},
 	scaleText: {
-		marginRight: 8,
-		fontSize: 16
+		fontSize: 16,
+		color: '#436389'
 	}
 });
