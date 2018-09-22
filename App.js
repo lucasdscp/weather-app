@@ -1,49 +1,94 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component }  from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import axios from 'axios';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import Weather from './src/components/Weather';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class App extends Component {
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
+	state = { location: {}, consolidated_weather: [], scale: 'celsius' };
+
+	componentDidMount() {
+		navigator.geolocation.getCurrentPosition(this.currentPositionSuccess.bind(this), this.currentPositionFailure.bind(this));
+	}
+	
+	currentPositionSuccess(position) {
+		const { coords } = position;
+		
+		if (coords && coords.latitude && coords.longitude) {
+			this.getWorldID(coords.latitude, coords.longitude);
+		}
+	}
+
+	currentPositionFailure(err) {
+		console.log(err);
+	}
+
+	getWorldID(lat, lon) {
+		axios.get(`https://www.metaweather.com/api/location/search/?lattlong=${lat},${lon}`)
+		.then((res) => {
+			if (res && res.data) {
+				const { data } = res;
+				
+				if (data && data.length) {
+					this.setState({ location: data[0] });
+					this.getWeather();
+				}
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
+
+	getWeather() {
+		const { location } = this.state;
+
+		if (location && location.woeid) {
+			axios.get(`https://www.metaweather.com/api/location/${location.woeid}/`)
+			.then((res) => {
+				if (res && res.data) {
+					const { data } = res;
+					
+					if (data && data.consolidated_weather && data.consolidated_weather.length) {
+						const { consolidated_weather } = data;
+						this.setState({ consolidated_weather });
+					}
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		}		
+	}
+
+	renderLocationName() {
+		const { location } = this.state;
+		return location && location.title ? location.title : 'Carregando...';
+	}
+
+	renderCurrentWeather() {
+		const { consolidated_weather, scale } = this.state;
+
+		if (consolidated_weather && consolidated_weather.length) {
+			return (
+				<Weather temp={consolidated_weather[0].the_temp} scale={scale} />
+			);
+		}
+	}
+
+	render() {
+		return (
+			<View>
+				<Text>
+					{this.renderLocationName()}
+				</Text>
+				{this.renderCurrentWeather()}
+			</View>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
 });
