@@ -18,7 +18,7 @@ class WeatherList extends Component {
                 const month = date.getMonth() + 1;
 
                 const borderBottomColor = (key + 1) < weather.length ? '#ededed' : 'transparent';
-                const paddingBottom = marginBottom = (key + 1) < weather.length ? 4 : 0;
+                const paddingBottom = marginBottom = (key + 1) < weather.length ? 6 : 0;
 
                 return (
                     <View style={[styles.body, { borderBottomColor, paddingBottom, marginBottom }]} key={key}>

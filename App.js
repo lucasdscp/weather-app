@@ -157,10 +157,10 @@ const styles = StyleSheet.create({
 		color: '#436389'
 	},
 	locationContainer: {
-		minHeight: 80
+		minHeight: 100
 	},
 	mapContainer: {
-		flex: 0.8,
+		flex: 0.7,
 		overflow: 'hidden',
 		backgroundColor: '#FFF'
 	},
