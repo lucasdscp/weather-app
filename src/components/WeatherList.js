@@ -19,10 +19,10 @@ class WeatherList extends Component {
 
                 return (
                     <View style={styles.body} key={key}>
-                        <Text>
+                        <Text style={styles.dateText}>
                             {this.formatDate(date.getDate())}/{this.formatDate(month)}
                         </Text>
-                        <Weather temp={item.the_temp} isFahrenheit={isFahrenheit} />
+                        <Weather style={styles.weather} temp={item.the_temp} isFahrenheit={isFahrenheit} />
                         <Image 
                         source={{uri: `https://www.metaweather.com/static/img/weather/png/${item.weather_state_abbr}.png` }} 
                         style={styles.icon}
@@ -47,11 +47,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 4
     },
     icon: {
         width: 30,
         height: 30
+    },
+    dateText: {
+        fontSize: 18
+    },
+    weather: {
+        fontSize: 18
     }
 });
 

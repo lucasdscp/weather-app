@@ -92,7 +92,7 @@ export default class App extends Component {
 
 		if (consolidated_weather && consolidated_weather.length) {
 			return (
-				<Weather temp={consolidated_weather[0].the_temp} isFahrenheit={isFahrenheit} />
+				<Weather style={styles.locationTemp} temp={consolidated_weather[0].the_temp} isFahrenheit={isFahrenheit} />
 			);
 		}
 	}
@@ -102,10 +102,12 @@ export default class App extends Component {
 
 		return (
 			<View style={styles.body}>
-				<Text>
-					{this.renderLocationName()}
-				</Text>
-				{this.renderCurrentWeather()}
+				<View style={styles.locationContainer}>
+					<Text style={styles.locationName}>
+						{this.renderLocationName()}
+					</Text>
+					{this.renderCurrentWeather()}
+				</View>
 				<View style={styles.mapContainer}>
 					<MapView
 						region={this.state.coords}
@@ -121,7 +123,7 @@ export default class App extends Component {
 					<WeatherList weather={consolidated_weather} isFahrenheit={isFahrenheit} />
 				</View>
 				<View style={styles.switchContainer}>
-					<Text>
+					<Text style={styles.scaleText}>
 						Celsius / Fahrenheit
 					</Text>
 					<Switch
@@ -138,20 +140,41 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
 	body: { 
-		flex: 1 
+		flex: 1, 
+		padding: 16,
+		backgroundColor: '#FFF'
+	},
+	locationName: {
+		fontSize: 26,
+		textAlign: 'center'
+	},
+	locationTemp: {
+		fontSize: 22,
+		textAlign: 'center'
+	},
+	locationContainer: {
+		minHeight: 80
 	},
 	mapContainer: {
-		flex: 1
+		flex: 0.8,
+		borderRadius: 5,
+		overflow: 'hidden',
+		backgroundColor: '#FFF'
 	},
 	map: { 
 		...StyleSheet.absoluteFillObject 
 	},
 	weatherContainer: {
-		flex: 1
+		flex: 1,
+		marginTop: 16
 	},
 	switchContainer: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center'
+	},
+	scaleText: {
+		marginRight: 8,
+		fontSize: 16
 	}
 });

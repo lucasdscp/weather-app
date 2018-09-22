@@ -19,16 +19,12 @@ class Weather extends Component {
     render() {
         return (
             <View>
-                <Text>
+                <Text style={this.props.style}>
                     {this.renderTemp()}
                 </Text>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-
-});
 
 export default Weather;
