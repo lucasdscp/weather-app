@@ -1,12 +1,23 @@
 import React, { Component }  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import MapView from 'react-native-maps';
 import axios from 'axios';
 
 import Weather from './src/components/Weather';
 
 export default class App extends Component {
 
-	state = { location: {}, consolidated_weather: [], scale: 'celsius' };
+	state = {
+		location: {}, 
+		consolidated_weather: [], 
+		scale: 'celsius', 
+		coords: {
+			latitude: 37.78825,
+			longitude: -122.4324,
+			latitudeDelta: 0.015,
+			longitudeDelta: 0.0121
+		} 
+	};
 
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(this.currentPositionSuccess.bind(this), this.currentPositionFailure.bind(this));
@@ -16,6 +27,10 @@ export default class App extends Component {
 		const { coords } = position;
 		
 		if (coords && coords.latitude && coords.longitude) {
+			// coords.latitudeDelta = 0.0922;
+			// coords.longitudeDelta = 0.0421;
+
+			// this.setState({ coords });
 			this.getWorldID(coords.latitude, coords.longitude);
 		}
 	}
@@ -84,6 +99,10 @@ export default class App extends Component {
 					{this.renderLocationName()}
 				</Text>
 				{this.renderCurrentWeather()}
+				<MapView
+					region={this.state.coords}
+					style={{ width: 300, height: 300 }}
+				/>
 			</View>
 		);
 	}
