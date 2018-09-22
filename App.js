@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 
 import Weather from './src/components/Weather';
@@ -14,8 +14,8 @@ export default class App extends Component {
 		coords: {
 			latitude: 37.78825,
 			longitude: -122.4324,
-			latitudeDelta: 0.015,
-			longitudeDelta: 0.0121
+			latitudeDelta: 0.0022,
+			longitudeDelta: 0.0022
 		} 
 	};
 
@@ -27,10 +27,10 @@ export default class App extends Component {
 		const { coords } = position;
 		
 		if (coords && coords.latitude && coords.longitude) {
-			// coords.latitudeDelta = 0.0922;
-			// coords.longitudeDelta = 0.0421;
+			coords.latitudeDelta = 0.0022;
+			coords.longitudeDelta = 0.0022;
 
-			// this.setState({ coords });
+			this.setState({ coords });
 			this.getWorldID(coords.latitude, coords.longitude);
 		}
 	}
@@ -94,15 +94,23 @@ export default class App extends Component {
 
 	render() {
 		return (
-			<View>
+			<View style={{ flex: 1 }}>
 				<Text>
 					{this.renderLocationName()}
 				</Text>
 				{this.renderCurrentWeather()}
-				<MapView
-					region={this.state.coords}
-					style={{ width: 300, height: 300 }}
-				/>
+				<View style={{ flex: 1 }}>
+					<MapView
+						region={this.state.coords}
+						style={{ ...StyleSheet.absoluteFillObject }}
+					>
+						<Marker
+							coordinate={this.state.coords}
+							image={require('./src/images/pin.png')}
+							style={{ width: 5, height: 5 }}
+						/>
+					</MapView>
+				</View>
 			</View>
 		);
 	}
