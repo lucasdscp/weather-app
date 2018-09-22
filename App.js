@@ -4,6 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 
 import Weather from './src/components/Weather';
+import WeatherList from './src/components/WeatherList';
 
 export default class App extends Component {
 
@@ -93,23 +94,27 @@ export default class App extends Component {
 	}
 
 	render() {
+		const { consolidated_weather, scale } = this.state;
+
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={styles.body}>
 				<Text>
 					{this.renderLocationName()}
 				</Text>
 				{this.renderCurrentWeather()}
-				<View style={{ flex: 1 }}>
+				<View style={styles.mapContainer}>
 					<MapView
 						region={this.state.coords}
-						style={{ ...StyleSheet.absoluteFillObject }}
+						style={styles.map}
 					>
 						<Marker
 							coordinate={this.state.coords}
 							image={require('./src/images/pin.png')}
-							style={{ width: 5, height: 5 }}
 						/>
 					</MapView>
+				</View>
+				<View style={styles.weatherContainer}>
+					<WeatherList weather={consolidated_weather} scale={scale} />
 				</View>
 			</View>
 		);
@@ -117,5 +122,16 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
-
+	body: { 
+		flex: 1 
+	},
+	mapContainer: {
+		flex: 1
+	},
+	map: { 
+		...StyleSheet.absoluteFillObject 
+	},
+	weatherContainer: {
+		flex: 1
+	}
 });
