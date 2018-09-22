@@ -9,7 +9,7 @@ class WeatherList extends Component {
     }
 
     renderWeatherList() {
-        const { weather, scale } = this.props;
+        const { weather, isFahrenheit } = this.props;
 
         if (weather && weather.length) {
             console.log(weather);
@@ -22,7 +22,7 @@ class WeatherList extends Component {
                         <Text>
                             {this.formatDate(date.getDate())}/{this.formatDate(month)}
                         </Text>
-                        <Weather temp={item.the_temp} scale={scale} />
+                        <Weather temp={item.the_temp} isFahrenheit={isFahrenheit} />
                         <Image 
                         source={{uri: `https://www.metaweather.com/static/img/weather/png/${item.weather_state_abbr}.png` }} 
                         style={styles.icon}

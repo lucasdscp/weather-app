@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Switch } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 
@@ -10,8 +10,8 @@ export default class App extends Component {
 
 	state = {
 		location: {}, 
-		consolidated_weather: [], 
-		scale: 'celsius', 
+		consolidated_weather: [],
+		isFahrenheit: false,
 		coords: {
 			latitude: 37.78825,
 			longitude: -122.4324,
@@ -78,23 +78,27 @@ export default class App extends Component {
 		}		
 	}
 
+	toggleSwitch() {
+		this.setState({ isFahrenheit: !this.state.isFahrenheit });
+	}
+
 	renderLocationName() {
 		const { location } = this.state;
 		return location && location.title ? location.title : 'Carregando...';
 	}
 
 	renderCurrentWeather() {
-		const { consolidated_weather, scale } = this.state;
+		const { consolidated_weather, isFahrenheit } = this.state;
 
 		if (consolidated_weather && consolidated_weather.length) {
 			return (
-				<Weather temp={consolidated_weather[0].the_temp} scale={scale} />
+				<Weather temp={consolidated_weather[0].the_temp} isFahrenheit={isFahrenheit} />
 			);
 		}
 	}
 
 	render() {
-		const { consolidated_weather, scale } = this.state;
+		const { consolidated_weather, isFahrenheit } = this.state;
 
 		return (
 			<View style={styles.body}>
@@ -114,7 +118,18 @@ export default class App extends Component {
 					</MapView>
 				</View>
 				<View style={styles.weatherContainer}>
-					<WeatherList weather={consolidated_weather} scale={scale} />
+					<WeatherList weather={consolidated_weather} isFahrenheit={isFahrenheit} />
+				</View>
+				<View style={styles.switchContainer}>
+					<Text>
+						Celsius / Fahrenheit
+					</Text>
+					<Switch
+						onValueChange={this.toggleSwitch.bind(this)}
+						value={isFahrenheit}
+						trackColor={{ true: "#ffae82", false: null }}
+						_thumbColor="#ff5a00"
+					/>
 				</View>
 			</View>
 		);
@@ -133,5 +148,10 @@ const styles = StyleSheet.create({
 	},
 	weatherContainer: {
 		flex: 1
+	},
+	switchContainer: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center'
 	}
 });
