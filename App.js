@@ -1,6 +1,7 @@
 import React, { Component }  from 'react';
 import { StyleSheet, Text, View, Switch } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
 
 import Weather from './src/components/Weather';
@@ -22,6 +23,7 @@ export default class App extends Component {
 
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(this.currentPositionSuccess.bind(this), this.currentPositionFailure.bind(this));
+		SplashScreen.hide();
 	}
 	
 	currentPositionSuccess(position) {
