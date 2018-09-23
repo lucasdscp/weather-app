@@ -11,7 +11,7 @@ class Weather extends Component {
         if (temp) {
             // Converting celsius (default scale) to fahrenheit
             if (isFahrenheit) temp = (temp * 1.8) + 32;
-            return `${parseInt(temp)}°`;
+            return `${Math.floor(temp)}°`;
         } else {
             return '...';
         }
