@@ -7,12 +7,18 @@ import axios from 'axios';
 import Weather from './src/components/Weather';
 import WeatherList from './src/components/WeatherList';
 
+const ERROR_CODE = {
+	PERMISSION_ERROR: 1,
+	REQUEST_ERROR: 2
+};
+
 export default class App extends Component {
 
 	state = {
 		location: {}, 
 		consolidated_weather: [],
 		isFahrenheit: false,
+		errorMessage: false,
 		coords: {
 			latitude: 37.78825,
 			longitude: -122.4324,
@@ -38,8 +44,8 @@ export default class App extends Component {
 		}
 	}
 
-	currentPositionFailure(err) {
-		console.log(err);
+	currentPositionFailure() {
+		this.onLocationError(ERROR_CODE.PERMISSION_ERROR);
 	}
 
 	getWorldID(lat, lon) {
@@ -55,7 +61,7 @@ export default class App extends Component {
 			}
 		})
 		.catch((err) => {
-			console.log(err);
+			this.onLocationError(ERROR_CODE.REQUEST_ERROR);
 		});
 	}
 
@@ -75,9 +81,27 @@ export default class App extends Component {
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				this.onLocationError(ERROR_CODE.REQUEST_ERROR);
 			});
 		}		
+	}
+
+	onLocationError(err) {
+		let errorMessage = 'Não foi possível encontrar o local. ';
+
+		switch (err) {
+			case ERROR_CODE.PERMISSION_ERROR:
+				errorMessage += 'Verifique as permissões do aplicativo.';
+				break;
+			case ERROR_CODE.REQUEST_ERROR:
+				errorMessage += 'Verifique sua conexão com a internet.';
+				break;
+			default: // Unknown Error
+				errorMessage = 'Não foi possível mostrar as informações de clima. Tente novamente mais tarde.'
+				break;
+		}
+
+		this.setState({ errorMessage });
 	}
 
 	toggleSwitch() {
@@ -85,8 +109,8 @@ export default class App extends Component {
 	}
 
 	renderLocationName() {
-		const { location } = this.state;
-		return location && location.title ? location.title : 'Carregando...';
+		const { location, errorMessage } = this.state;
+		if (!errorMessage) return location && location.title ? location.title : 'Carregando...';
 	}
 
 	renderCurrentWeather() {
@@ -99,12 +123,35 @@ export default class App extends Component {
 		}
 	}
 
+	renderWeatherList() {
+		const { consolidated_weather, isFahrenheit } = this.state;
+
+		if (consolidated_weather && consolidated_weather.length) {
+			return (
+				<WeatherList weather={consolidated_weather} isFahrenheit={isFahrenheit} />
+			);
+		}
+	}
+
+	renderErrorMessage() {
+		const { errorMessage } = this.state;
+
+		if (errorMessage) {
+			return (
+				<Text style={styles.errorMessage}>
+					{errorMessage}
+				</Text>
+			);
+		}
+	}
+
 	render() {
 		const { consolidated_weather, isFahrenheit } = this.state;
 
 		return (
 			<View style={styles.body}>
 				<View style={styles.locationContainer}>
+					{this.renderErrorMessage()}
 					<Text style={styles.locationName}>
 						{this.renderLocationName()}
 					</Text>
@@ -119,7 +166,7 @@ export default class App extends Component {
 					</MapView>
 				</View>
 				<View style={styles.weatherContainer}>
-					<WeatherList weather={consolidated_weather} isFahrenheit={isFahrenheit} />
+					{this.renderWeatherList()}
 				</View>
 				<TouchableOpacity onPress={this.toggleSwitch.bind(this)}>
 					<View style={styles.switchContainer}>
@@ -179,5 +226,9 @@ const styles = StyleSheet.create({
 	scaleText: {
 		fontSize: 16,
 		color: '#436389'
+	},
+	errorMessage: {
+		fontSize: 14,
+		color: '#AAA'
 	}
 });

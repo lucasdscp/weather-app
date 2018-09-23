@@ -12,7 +12,6 @@ class WeatherList extends Component {
         const { weather, isFahrenheit } = this.props;
 
         if (weather && weather.length) {
-            console.log(weather);
             return weather.map((item, key) => {
                 const date = new Date(item.applicable_date.replace(/-/g, '/'));
                 const month = date.getMonth() + 1;
