@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, Text, View, Switch } from 'react-native';
+import { StyleSheet, Text, View, Switch, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
@@ -115,10 +115,9 @@ export default class App extends Component {
 						region={this.state.coords}
 						style={styles.map}
 					>
-						<Marker
-							coordinate={this.state.coords}
-							image={require('./src/images/pin.png')}
-						/>
+						<Marker coordinate={this.state.coords}>
+							<Image source={require('./src/images/pin.png')} style={{ width: 16, height: 16 }} />
+						</Marker>
 					</MapView>
 				</View>
 				<View style={styles.weatherContainer}>
@@ -132,8 +131,7 @@ export default class App extends Component {
 						onValueChange={this.toggleSwitch.bind(this)}
 						value={isFahrenheit}
 						trackColor={{ true: "#ffae82", false: null }}
-						_thumbColor="#ff5a00"
-						style={styles.switch}
+						thumbTintColor="#ff5a00"
 					/>
 				</View>
 			</View>
@@ -177,9 +175,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center'
-	},
-	switch: {
-		left: 14
 	},
 	scaleText: {
 		fontSize: 16,
