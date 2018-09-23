@@ -9,6 +9,7 @@ class Weather extends Component {
         let temp = this.state.temp;
 
         if (temp) {
+            // Converting celsius (default scale) to fahrenheit
             if (isFahrenheit) temp = (temp * 1.8) + 32;
             return `${parseInt(temp)}°`;
         } else {

@@ -5,6 +5,7 @@ import Weather from './Weather';
 
 class WeatherList extends Component {
     formatDate(date) {
+        // Just inserting previous zero in day information
         return date < 10 ? `0${date}` : date;
     }
 
@@ -13,9 +14,11 @@ class WeatherList extends Component {
 
         if (weather && weather.length) {
             return weather.map((item, key) => {
+                // Adjusting date format to create a date object
                 const date = new Date(item.applicable_date.replace(/-/g, '/'));
                 const month = date.getMonth() + 1;
 
+                // Fixing last element of the list removing border and padding
                 const borderBottomColor = (key + 1) < weather.length ? '#ededed' : 'transparent';
                 const paddingBottom = marginBottom = (key + 1) < weather.length ? 6 : 0;
 

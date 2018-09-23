@@ -7,6 +7,7 @@ import axios from 'axios';
 import Weather from './src/components/Weather';
 import WeatherList from './src/components/WeatherList';
 
+// Error code constant
 const ERROR_CODE = {
 	PERMISSION_ERROR: 1,
 	REQUEST_ERROR: 2
@@ -15,11 +16,11 @@ const ERROR_CODE = {
 export default class App extends Component {
 
 	state = {
-		location: {}, 
-		consolidated_weather: [],
+		location: {}, // Information about user's current location (city, woeid)
+		consolidated_weather: [], // Daily forecast information
 		isFahrenheit: false,
 		errorMessage: false,
-		coords: {
+		coords: { // Default map information
 			latitude: 37.78825,
 			longitude: -122.4324,
 			latitudeDelta: 0.0022,
@@ -35,11 +36,14 @@ export default class App extends Component {
 	currentPositionSuccess(position) {
 		const { coords } = position;
 		
+		// Checking if coords have the requiring keys
 		if (coords && coords.latitude && coords.longitude) {
+			// Set delta to zoom in to de map
 			coords.latitudeDelta = 0.0022;
 			coords.longitudeDelta = 0.0022;
 
 			this.setState({ coords });
+			// Get the location ID of current user's latitude and longitude 
 			this.getWorldID(coords.latitude, coords.longitude);
 		}
 	}
@@ -54,8 +58,11 @@ export default class App extends Component {
 			if (res && res.data) {
 				const { data } = res;
 				
+				// Check if have the requiring keys
 				if (data && data.length) {
+					// Get the first location of array (major proximity)
 					this.setState({ location: data[0] });
+					// Request for daily forecast
 					this.getWeather();
 				}
 			}
@@ -74,6 +81,7 @@ export default class App extends Component {
 				if (res && res.data) {
 					const { data } = res;
 					
+					// Check if data have weather information
 					if (data && data.consolidated_weather && data.consolidated_weather.length) {
 						const { consolidated_weather } = data;
 						this.setState({ consolidated_weather });
