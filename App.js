@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, Text, View, Switch, Image } from 'react-native';
+import { StyleSheet, Text, View, Switch, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
@@ -115,25 +115,25 @@ export default class App extends Component {
 						region={this.state.coords}
 						style={styles.map}
 					>
-						<Marker coordinate={this.state.coords}>
-							<Image source={require('./src/images/pin.png')} style={{ width: 16, height: 16 }} />
-						</Marker>
+						<Marker coordinate={this.state.coords} pinColor="#ff5a00" />
 					</MapView>
 				</View>
 				<View style={styles.weatherContainer}>
 					<WeatherList weather={consolidated_weather} isFahrenheit={isFahrenheit} />
 				</View>
-				<View style={styles.switchContainer}>
-					<Text style={styles.scaleText}>
-						Celsius / Fahrenheit
-					</Text>
-					<Switch
-						onValueChange={this.toggleSwitch.bind(this)}
-						value={isFahrenheit}
-						trackColor={{ true: "#ffae82", false: null }}
-						thumbTintColor="#ff5a00"
-					/>
-				</View>
+				<TouchableOpacity onPress={this.toggleSwitch.bind(this)}>
+					<View style={styles.switchContainer}>
+						<Text style={styles.scaleText}>
+							Celsius / Fahrenheit
+						</Text>
+						<Switch
+							onValueChange={this.toggleSwitch.bind(this)}
+							value={isFahrenheit}
+							trackColor={{ true: "#ffae82", false: null }}
+							thumbTintColor="#ff5a00"
+						/>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
